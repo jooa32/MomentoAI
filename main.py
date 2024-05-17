@@ -16,7 +16,5 @@ username: str = __argv.username
 # show_version: bool = __argv.version
 
 hello: str = f"hi{f', {username}' if username else ''}"
-# version: str = f" - python version : {sys.version_info.major}.{sys.version_info.minor}" if show_version else ""
-# this is change the difference@!!!!!!
 
 print(f"{hello}")
