@@ -1,19 +1,38 @@
-import boto3 #boto3 is AWS SDK for python, which allows python deveopers to write the software that makes use of services like Amazon S3 and Amazon EC2
-from google.cloud import storage # GCP blob storage
+class Service:
+    def __init__(self, name, host):
+        self.name = name
+        self.host = host
+        self.running = False
 
-class ServiceMigrationTool:
-    def __init__(self) -> None:
-        pass
-        
-    def migrate_bucket(self, aws_bucket_name, gcp_bucket_name):
-        
-    s3 = boto3.resource('s3')
+    def start(self):
+        self.running = True
+        print(f"Service {self.name} started on {self.host}.")
 
-    # Create an S3 client
-    s3_client = boto3.client('s3')
-    # print(s3_client)
+    def stop(self):
+        self.running = False
+        print(f"Service {self.name} stopped on {self.host}.")
 
-    # List buckets using the client to verify it works
-    s3_resource = boto3.resource('s3')
-    print(s3_resource)
+    def migrate(self, new_host):
+        self.stop()
+        print(f"Migrating service {self.name} from {self.host} to {new_host}.")
+        self.host = new_host
+        self.start()
 
+def migrate_service(service, new_host):
+    service.migrate(new_host)
+
+if __name__ == "__main__":
+    # Create a service instance
+    my_service = Service(name="TestService", host="HostA")
+
+    # Start the service
+    my_service.start()
+
+    # Migrate the service to a new host
+    migrate_service(my_service, "HostB")
+
+    # Ensure the service is running on the new host
+    if my_service.host == "HostB" and my_service.running:
+        print("Service migration successful.")
+    else:
+        print("Service migration failed.")
