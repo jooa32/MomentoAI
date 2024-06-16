@@ -6,6 +6,8 @@ class Service:
         self.name = name
         self.host = host
         self.running = False
+        self.ec2 = boto3.client('ec2', region_name='us-west-2')  # Replace 'us-west-2' with your desired AWS region
+
 
     def start(self):
         self.running = True
@@ -44,14 +46,14 @@ class AWSService(Service):
         self.instance_id = new_instance_id
         self.host = f"AWS instance {new_instance_id}"
         self.start()
-    
+
 class GCPService(Service):
     def __init__(self,name,instance_name, zone):
         super().__init__(name, f"GCP instance {instance_name}")
         self.instance_name = instance_name
         self.zone = zone
         self.client = compute_v1.InstancesClient()
-    
+
     def start(self):
         super().start()
         # Start the GCP instance
