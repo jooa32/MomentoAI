@@ -27,6 +27,7 @@ def migrate_file(s3_client, source_bucket, destination_bucket, key):
 
 def main():
     # List objects in the source S3 bucket
+    # testing 
     objects = s3_client.list_objects_v2(Bucket=source_bucket)
     if 'Contents' in objects:
         for obj in objects['Contents']:
