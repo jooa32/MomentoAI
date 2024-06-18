@@ -1,43 +1,31 @@
-import boto3 # type: ignore
-from google.cloud import storage
-import os
+# service migration - migrate a simple web app from one EC2 instance 
+# to another using an automated approach?
 
-# Set up AWS S3 client
-s3_client = boto3.client('s3', aws_access_key_id='YOUR_AWS_ACCESS_KEY', aws_secret_access_key='YOUR_AWS_SECRET_KEY', region_name='YOUR_AWS_REGION')
-source_bucket = 'your-source-bucket-name'
+# AWS SDK for python - to integrate python application, lib, or script with AWS service
+import boto3
 
-# Set up GCS client
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'path/to/your/gcp-credentials.json'
-storage_client = storage.Client()
-destination_bucket = storage_client.bucket('your-destination-bucket-name')
+# initialize Boto3
+ec2_client = boto3.client('ec2', region_name='us-west-2')
+route53_client = boto3.client('route53', region_name='us-west-2')
 
-def migrate_file(s3_client, source_bucket, destination_bucket, key):
-    # Download the file from S3
-    s3_client.download_file(source_bucket, key, key)
-    print(f'Downloaded {key} from S3')
+def migrate_service():
+    """migrate a service from one EC2 instance to anohter"""
+    print("print service migrate")
 
-    # Upload the file to GCS
-    blob = destination_bucket.blob(key)
-    blob.upload_from_filename(key)
-    print(f'Uploaded {key} to GCS')
+    # Get user input
+    instance_id = input("Enter Instance ID: ")
+    # source_instance_id = input("Enter Source Instance ID: ")
+    # key_name = input("Enter Key Name: ")
+    # security_group_ids = input("Enter Security Group IDs (comma-separated): ").split(',')
+    # subnet_id = input("Enter Subnet ID: ")
+    # hosted_zone_id = input("Enter Hosted Zone ID: ")
+    # record_set_name = input("Enter Record Set Name: ")
 
-    # Clean up the local file
-    os.remove(key)
-    print(f'Removed local file {key}')
+    
 
 def main():
-    # List objects in the source S3 bucket
-    # testing 
-    objects = s3_client.list_objects_v2(Bucket=source_bucket)
-    if 'Contents' in objects:
-        for obj in objects['Contents']:
-            key = obj['Key']
-            try:
-                migrate_file(s3_client, source_bucket, destination_bucket, key)
-            except Exception as e:
-                print(f'Failed to migrate {key}: {e}')
-    else:
-        print(f'No objects found in {source_bucket}')
+    migrate_service()
+    # print("hello world")
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
